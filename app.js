@@ -1,5 +1,7 @@
 const express = require("express");
-const dotenv = require("dotenv").config();
+if (process.env.NODE_ENV === 'development') {
+  const dotenv = require("dotenv").config();
+}
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
@@ -41,7 +43,7 @@ app.post("/", function(req, res) {
   const url = "https://us17.api.mailchimp.com/3.0/lists/" + list_id
   const options = {
     method: "POST",
-    auth: "carlos1:"+ api_key + "-us17"
+    auth: "carlos1:" + api_key + "-us17"
   }
   // request status and refer to success or failure pages
   const request = https.request(url, options, function(response) {
@@ -61,7 +63,7 @@ app.post("/", function(req, res) {
 });
 
 //Redirect to home page in case of failure
-app.post("/failure", function(req, res){
+app.post("/failure", function(req, res) {
   res.redirect("/");
 });
 
