@@ -1,7 +1,9 @@
 const express = require("express");
+const dotenv = require("dotenv").config();
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
+
 
 const app = express();
 
@@ -9,6 +11,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
 
 
 app.get("/", function(req, res) {
@@ -31,11 +34,14 @@ app.post("/", function(req, res) {
   };
   const jsonData = JSON.stringify(data);
 
-  const url = "https://us17.api.mailchimp.com/3.0/lists/090960c081";
+  const api_key = process.env.API_KEY;
+  const list_id = process.env.LIST_ID;
 
+
+  const url = "https://us17.api.mailchimp.com/3.0/lists/" + list_id
   const options = {
     method: "POST",
-    auth: "carlos1:77ba8a1ec34a02d8ac6d07864eb18947-us17"
+    auth: "carlos1:"+ api_key + "-us17"
   }
   // request status and refer to success or failure pages
   const request = https.request(url, options, function(response) {
@@ -61,5 +67,8 @@ app.post("/failure", function(req, res){
 
 //process.env.PORT in order to deploy to heroku
 app.listen(process.env.PORT || 3000, function() {
+
   console.log("Server is running on port 3000");
+
+
 });
